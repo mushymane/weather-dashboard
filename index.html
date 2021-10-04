@@ -15,9 +15,8 @@
         <p>View the current 5-day weather forecast for a city</p>
     </header>
 
-    <main class="flex-row justify-space-between">
-        <div class="col-12 col-md-4">
-    
+    <main class="container flex-row justify-space-between">
+        <div class="col-3">
           <div class="card">
             <h3 class="card-header text-uppercase">Search By City</h3>
             <form id="city-form" class="card-body">
@@ -25,21 +24,33 @@
               <input name="city-text" id="city-text" type="text" autofocus="true" class="form-input" />
               <button type="submit" class="btn">Get Weather</button>
             </form>
-          </div>
-    
-          <div class="card">
             <h4 class="card-header text-uppercase">Previous</h4>
             <div id="prev-buttons" class="card-body">
-              <!-- <button class="btn">San Francisco</button>
-              <button class="btn">Los Angeles</button>
-              <button class="btn">Berkeley</button> -->
+                <!-- <button class="btn">San Francisco</button>
+                <button class="btn">Los Angeles</button>
+                <button class="btn">Berkeley</button> -->
             </div>
           </div>
         </div>
-    
-        <div class="col-12 col-md-8">
-          <h2 class="subtitle">5-Day Forecast: <span id="repo-search-term"></span></h2>
-          <div id="repos-container" class="list-group"></div>
+            
+        <div class="col-9">
+            <div class="row">
+                <div id="today-container">
+                    <h2 id="today-header">San Francisco (10/3/21)</h2>
+                </div>
+            </div>
+
+            <h2 class="subtitle">5-Day Forecast:</h2>
+
+            <div class="row d-flex">
+                <div id="forecast-container" class="container d-flex flex-row px-5 py-5 list-group">
+                    <div class="col mx-1" id="day1">1</div>
+                    <div class="col mx-1" id="day2">2</div>
+                    <div class="col mx-1" id="day3">3</div>
+                    <div class="col mx-1" id="day4">4</div>
+                    <div class="col mx-1" id="day5">5</div>
+                </div>
+            </div>
         </div>
       </main>
 
