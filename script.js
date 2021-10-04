@@ -3,6 +3,12 @@ var cityInput = document.querySelector("#city-text");
 var cityForm = document.querySelector("#city-form");
 var button = document.querySelector(".btn");
 
+var todayHeader = document.querySelector("#today-header");
+var todayTemp = document.querySelector("#temp");
+var todayHumidity = document.querySelector("#humidity");
+var todayWind = document.querySelector("#wind");
+var todayUV = document.querySelector("#uv");
+
 var prevCities = [];
 var appid = "75b8497a982601cce9f89a559e6380bb";
 
@@ -16,12 +22,29 @@ function init() {
     renderPrevCities();
 }
 
-function renderWeather(lat, lon) {
+function renderWeather(lat, lon, city) {
     // Display todays weather in larger div
         // City name, date, icon, temperature, humidity, wind speed, uv index
     // Display 5day forcast cards with date, icon, temperature, humidity
-    // var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + 
-    //     {lat}&lon={lon}&exclude={part}&appid={API key}
+    var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + appid;
+    console.log("--------------------")
+    fetch(apiUrl).then(function (response) {
+        if (response.ok) {
+            console.log(response);
+            response.json().then(function (data) {
+                console.log("data starts here")
+                console.log(data);
+                todayHeader.textContent = city + " (" + moment().format("dddd, MMMM Do YYYY") + ")";
+                console.log(data.current.temp, typeof(data.current.temp))
+                todayTemp.textContent = "Temperature: " + data.current.temp + " °F";
+                todayHumidity.textContent = "Humidity: " + data.current.humidity;
+                todayWind.textContent = "Wind Speed: " + data.current.wind_speed + " MPH";
+                todayUV.textContent = "UV Index: " + data.current.uvi;
+            });
+        } else {
+            alert('Error: ' + response.statusText);
+        }
+    });
 }
 
 function getCoordinates(city) {
@@ -33,7 +56,10 @@ function getCoordinates(city) {
             response.json().then(function (data) {
                 console.log(data);
                 console.log("lat:", data[0].lat, "lon:", data[0].lon)
-                renderWeather(data[0].lat, data[0].lon);
+                console.log(data[0].lat.toString())
+                var lat = data[0].lat.toString();
+                var lon = data[0].lon.toString();
+                renderWeather(lat, lon, data[0].name);
             });
         } else {
             alert('Error: ' + response.statusText);
@@ -72,7 +98,7 @@ cityForm.addEventListener("submit", function(event) {
       return;
     }
   
-    // Add new cityText to prevCities array, clear the input
+    // Add new cityText to prevCities array, clear the input, limits history to 10
     if (prevCities.length >= 10){
         prevCities.shift();
     }
@@ -83,7 +109,7 @@ cityForm.addEventListener("submit", function(event) {
     storePrev();
     renderPrevCities();
     getCoordinates(cityText);
-    renderWeather();
+    // renderWeather();
 });
 
 // Event listener for previous cities buttons
