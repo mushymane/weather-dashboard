@@ -8,7 +8,7 @@ var prevCities = [];
 function init() {
     var storedCities = JSON.parse(localStorage.getItem("prevCities"));
   
-    if (storedTodos !== null) {
+    if (storedCities !== null) {
       prevCities = storedCities;
     }
   
@@ -16,7 +16,7 @@ function init() {
 }
 
 function storePrev() {
-    localStorage.setItem("prev", JSON.stringify(prevCities));
+    localStorage.setItem("prevCities", JSON.stringify(prevCities));
 }
   
   // Add submit event to form
@@ -71,3 +71,4 @@ prevButtonsEl.addEventListener("click", function(event) {
     }
 });
 
+init();
