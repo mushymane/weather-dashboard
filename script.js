@@ -4,6 +4,7 @@ var cityForm = document.querySelector("#city-form");
 var button = document.querySelector(".btn");
 
 var prevCities = [];
+var appid = "75b8497a982601cce9f89a559e6380bb";
 
 function init() {
     var storedCities = JSON.parse(localStorage.getItem("prevCities"));
@@ -15,14 +16,28 @@ function init() {
     renderPrevCities();
 }
 
-function renderWeather() {
+function renderWeather(lat, lon) {
     // Display todays weather in larger div
         // City name, date, icon, temperature, humidity, wind speed, uv index
     // Display 5day forcast cards with date, icon, temperature, humidity
+    
 }
 
-function storePrev() {
-    localStorage.setItem("prevCities", JSON.stringify(prevCities));
+function getCoordinates(city) {
+    var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1" + "&appid=" + appid;
+
+    fetch(apiUrl).then(function (response) {
+        if (response.ok) {
+            console.log(response);
+            response.json().then(function (data) {
+                console.log(data);
+                console.log("lat:", data[0].lat, "lon:", data[0].lon)
+                displayRepos(data[0].lat, data[0].lon);
+            });
+        } else {
+            alert('Error: ' + response.statusText);
+        }
+    });
 }
 
 function renderPrevCities() {
@@ -39,6 +54,10 @@ function renderPrevCities() {
       btn.setAttribute("class", "btn");
       prevButtonsEl.appendChild(btn);
     }
+}
+
+function storePrev() {
+    localStorage.setItem("prevCities", JSON.stringify(prevCities));
 }
 
 // Event listener for submitted city input
@@ -59,6 +78,7 @@ cityForm.addEventListener("submit", function(event) {
     // Store updated cities in localStorage, re-render the list, render the weather
     storePrev();
     renderPrevCities();
+    getCoordinates(cityText);
     renderWeather();
 });
 
@@ -68,7 +88,8 @@ prevButtonsEl.addEventListener("click", function(event) {
     console.log("I was clicked");
 
     if (element.matches("button") === true) {
-      renderWeather();
+        // getCoordinates();
+        renderWeather();
     }
 });
 
