@@ -20,7 +20,8 @@ function renderWeather(lat, lon) {
     // Display todays weather in larger div
         // City name, date, icon, temperature, humidity, wind speed, uv index
     // Display 5day forcast cards with date, icon, temperature, humidity
-    
+    // var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + 
+    //     {lat}&lon={lon}&exclude={part}&appid={API key}
 }
 
 function getCoordinates(city) {
@@ -32,7 +33,7 @@ function getCoordinates(city) {
             response.json().then(function (data) {
                 console.log(data);
                 console.log("lat:", data[0].lat, "lon:", data[0].lon)
-                displayRepos(data[0].lat, data[0].lon);
+                renderWeather(data[0].lat, data[0].lon);
             });
         } else {
             alert('Error: ' + response.statusText);
@@ -71,7 +72,10 @@ cityForm.addEventListener("submit", function(event) {
       return;
     }
   
-    // Add new cityText to todos array, clear the input
+    // Add new cityText to prevCities array, clear the input
+    if (prevCities.length >= 10){
+        prevCities.shift();
+    }
     prevCities.push(cityText);
     cityInput.value = "";
   
