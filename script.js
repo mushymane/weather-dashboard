@@ -39,7 +39,7 @@ function renderWeather(lat, lon, city) {
                 
                 // Get and append the icon
                 var iconCode = data.current.weather[0].icon;
-                var iconLink = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+                var iconLink = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
                 var icon = document.createElement("img");
                 icon.setAttribute("src", iconLink);
                 todayHeader.textContent = city + " (" + moment().format("dddd, MMMM Do YYYY") + ")";
