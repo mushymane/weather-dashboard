@@ -14,29 +14,29 @@ var forecastContainer = document.querySelector("#forecast-container");
 var prevCities = [];
 var appid = "75b8497a982601cce9f89a559e6380bb";
 
+// This function is run at start. It get the saved city search history and shows current weather for SF
 function init() {
     var storedCities = JSON.parse(localStorage.getItem("prevCities"));
-  
+
+    // Updates prevCities array
     if (storedCities !== null) {
       prevCities = storedCities;
     }
   
-    renderPrevCities();
+    renderPrevCities(); // Renders search history
+    renderWeather(37.7749, -122.4194, "San Francisco"); // Initializes to SF
 }
 
+// Displays the weather
 function renderWeather(lat, lon, city) {
-    // Display todays weather in larger div
-        // City name, date, icon, temperature, humidity, wind speed, uv index
-    // Display 5day forcast cards with date, icon, temperature, humidity
+    // Requests a response from Open Weather API and uses imperial units (American - Farenheight, miles per hour)
     var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + appid;
-    console.log("--------------------")
+
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
-            console.log(response);
             response.json().then(function (data) {
-                console.log("data starts here")
-                console.log(data);
-
+                
+                // Get and append the icon
                 var iconCode = data.current.weather[0].icon;
                 var iconLink = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
                 var icon = document.createElement("img");
@@ -44,38 +44,50 @@ function renderWeather(lat, lon, city) {
                 todayHeader.textContent = city + " (" + moment().format("dddd, MMMM Do YYYY") + ")";
                 todayHeader.append(icon)
 
+                // Get the current temperature, humidity, and wind speed
                 todayTemp.textContent = "Temperature: " + data.current.temp + " °F";
                 todayHumidity.textContent = "Humidity: " + data.current.humidity;
                 todayWind.textContent = "Wind Speed: " + data.current.wind_speed + " MPH";
 
+                // Get and append the UV index, color coded
                 todayUV.textContent = "UV Index: ";
                 var uvbg = document.createElement("span");
                 uvbg.textContent = data.current.uvi;
                 getUVI(data.current.uvi, uvbg);
                 todayUV.append(uvbg);
 
+                // Clear the cards
+                $(forecastContainer).empty();
+                
+                // Creates new cards for the 5-day forecast
                 for (let i = 0; i < 5; i++) {
+
+                    // Initialize card, set attribute, set the date
                     var card = document.createElement("div");
                     card.setAttribute("class", "col mx1");
-                    var date = moment().add(i + 1, "days");
+                    var date = moment().add(i + 1, "days").format("ddd, MMM D YYYY");
                     var cardHeader = document.createElement("h4");
                     cardHeader.textContent = date;
+                    card.append(cardHeader)
 
+                    // Set the icon
                     var iconCode = data.daily[i + 1].weather[0].icon;
                     var iconLink = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
                     var icon = document.createElement("img");
                     icon.setAttribute("src", iconLink);
                     card.append(icon);
 
+                    // Set the temp
                     var temp = document.createElement("p");
-                    console.log(data.daily[i + 1].temp, typeof(data.daily[i + 1].temp))
                     temp.textContent = "Temp: " + data.daily[i + 1].temp.day + " °F";
                     card.append(temp);
 
+                    // Set the humidity
                     var humidity = document.createElement("p");
                     humidity.textContent = "Humidity: " + data.daily[i + 1].humidity;
                     card.append(humidity);
 
+                    // Append to container in HTML
                     forecastContainer.append(card)
                 }
             });
@@ -85,16 +97,15 @@ function renderWeather(lat, lon, city) {
     });
 }
 
+// Requests a response from Geocoding API to get coordinates. Latitude and longitude are needed to
+// receive a response from One Call API. Then renders the weather
 function getCoordinates(city) {
     var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1" + "&appid=" + appid;
 
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
-            console.log(response);
             response.json().then(function (data) {
-                console.log(data);
-                console.log("lat:", data[0].lat, "lon:", data[0].lon)
-                console.log(data[0].lat.toString())
+                // Get lat and lon properties from response
                 var lat = data[0].lat.toString();
                 var lon = data[0].lon.toString();
                 renderWeather(lat, lon, data[0].name);
@@ -105,6 +116,7 @@ function getCoordinates(city) {
     });
 }
 
+// Color codes the UV
 function getUVI(num, element) {
     if (num >= 0 && num < 3) {
         element.style.backgroundColor = "green";
@@ -119,6 +131,7 @@ function getUVI(num, element) {
     }
 }
 
+// Creates buttons for previous searches
 function renderPrevCities() {
     // Clear prevButtons element and update
     prevButtonsEl.innerHTML = "";
@@ -135,6 +148,7 @@ function renderPrevCities() {
     }
 }
 
+// Updates localStorage
 function storePrev() {
     localStorage.setItem("prevCities", JSON.stringify(prevCities));
 }
@@ -161,17 +175,16 @@ cityForm.addEventListener("submit", function(event) {
     storePrev();
     renderPrevCities();
     getCoordinates(cityText);
-    // renderWeather();
 });
 
-// Event listener for previous cities buttons
+// Event listener for previous cities buttons - renders the weather
 prevButtonsEl.addEventListener("click", function(event) {
     var element = event.target;
     console.log("I was clicked");
 
     if (element.matches("button") === true) {
-        // getCoordinates();
-        renderWeather();
+        var city = element.textContent;
+        getCoordinates(city);
     }
 });
 
