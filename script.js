@@ -9,7 +9,7 @@ var todayHumidity = document.querySelector("#humidity");
 var todayWind = document.querySelector("#wind");
 var todayUV = document.querySelector("#uv");
 var uvColor = document.querySelector("#uv-color");
-// var forecastContainer = document.querySelector("#forecast-container");
+var forecastContainer = document.querySelector("#forecast-container");
 
 var prevCities = [];
 var appid = "75b8497a982601cce9f89a559e6380bb";
@@ -51,7 +51,6 @@ function renderWeather(lat, lon, city) {
                 todayUV.textContent = "UV Index: ";
                 var uvbg = document.createElement("span");
                 uvbg.textContent = data.current.uvi;
-                // console.log(data.current.uvi, typeof(data.current.uvi))
                 getUVI(data.current.uvi, uvbg);
                 todayUV.append(uvbg);
 
@@ -62,6 +61,22 @@ function renderWeather(lat, lon, city) {
                     var cardHeader = document.createElement("h4");
                     cardHeader.textContent = date;
 
+                    var iconCode = data.daily[i + 1].weather[0].icon;
+                    var iconLink = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+                    var icon = document.createElement("img");
+                    icon.setAttribute("src", iconLink);
+                    card.append(icon);
+
+                    var temp = document.createElement("p");
+                    console.log(data.daily[i + 1].temp, typeof(data.daily[i + 1].temp))
+                    temp.textContent = "Temp: " + data.daily[i + 1].temp.day + " °F";
+                    card.append(temp);
+
+                    var humidity = document.createElement("p");
+                    humidity.textContent = "Humidity: " + data.daily[i + 1].humidity;
+                    card.append(humidity);
+
+                    forecastContainer.append(card)
                 }
             });
         } else {
