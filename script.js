@@ -8,6 +8,8 @@ var todayTemp = document.querySelector("#temp");
 var todayHumidity = document.querySelector("#humidity");
 var todayWind = document.querySelector("#wind");
 var todayUV = document.querySelector("#uv");
+var uvColor = document.querySelector("#uv-color");
+// var forecastContainer = document.querySelector("#forecast-container");
 
 var prevCities = [];
 var appid = "75b8497a982601cce9f89a559e6380bb";
@@ -34,12 +36,30 @@ function renderWeather(lat, lon, city) {
             response.json().then(function (data) {
                 console.log("data starts here")
                 console.log(data);
+                var iconCode = data.current.weather[0].icon;
+                console.log(iconCode, typeof(iconCode))
+                var iconLink = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+                var icon = document.createElement("img");
+                icon.setAttribute("src", iconLink);
+                // getIcon(data.current.weather[0].icon)
                 todayHeader.textContent = city + " (" + moment().format("dddd, MMMM Do YYYY") + ")";
-                console.log(data.current.temp, typeof(data.current.temp))
+                todayHeader.append(icon)
                 todayTemp.textContent = "Temperature: " + data.current.temp + " °F";
                 todayHumidity.textContent = "Humidity: " + data.current.humidity;
                 todayWind.textContent = "Wind Speed: " + data.current.wind_speed + " MPH";
-                todayUV.textContent = "UV Index: " + data.current.uvi;
+                todayUV.textContent = "UV Index: ";
+                $("uv-color").text(data.current.uvi);
+                console.log(data.current.uvi, typeof(data.current.uvi))
+                getUVI(data.current.uvi);
+
+                for (let i = 0; i < 5; i++) {
+                    var card = document.createElement("div");
+                    card.setAttribute("class", "col mx1");
+                    var date = moment().add(i + 1, "days");
+                    var cardHeader = document.createElement("h4");
+                    cardHeader.textContent = date;
+
+                }
             });
         } else {
             alert('Error: ' + response.statusText);
@@ -65,6 +85,24 @@ function getCoordinates(city) {
             alert('Error: ' + response.statusText);
         }
     });
+}
+
+function getUVI(num) {
+    if (num >= 0 && num < 3) {
+        uvColor.style.backgroundColor = "green";
+    } else if (num >= 3 && num < 6) {
+        uvColor.style.backgroundColor = "yellow";
+    } else if (num >= 6 && num < 8) {
+        uvColor.style.backgroundColor = "orange";
+    } else if (num >= 8 && num < 11) {
+        uvColor.style.backgroundColor = "red";
+    } else {
+        uvColor.style.backgroundColor = "purple";
+    }
+}
+
+function getIcon(iconCode) {
+    return "<img src='http://openweathermap.org/img/wn/" + iconCode + "@2x.png'>"
 }
 
 function renderPrevCities() {
