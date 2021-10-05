@@ -12,19 +12,19 @@
 <body class="flex-column min-100-vh">
     <header class="hero d-flex align-items-center justify-content-center">
         <h1 class="app-title">Weather Dashboard</h1>
-        <p>View the current 5-day weather forecast for a city</p>
+        <!-- <p>View the current 5-day weather forecast for a city</p> -->
     </header>
 
     <main class="container flex-row justify-space-between">
         <div class="col-3">
           <div class="card">
-            <h3 class="card-header text-uppercase">Search By City</h3>
+            <h3 class="card-header">Search By City</h3>
             <form id="city-form" class="card-body">
-              <label class="form-label" for="city-text">City</label>
+              <label class="form-label" for="city-text">Any city in the world...</label>
               <input name="city-text" id="city-text" type="text" autofocus="true" class="form-input" />
               <button type="submit" class="btn">Get Weather</button>
             </form>
-            <h4 class="card-header text-uppercase">Previous</h4>
+            <h4 class="card-header">Previous</h4>
             <div id="prev-buttons" class="card-body"></div>
           </div>
         </div>
@@ -43,7 +43,7 @@
             <h2 class="subtitle" style="padding: 2.5%;">5-Day Forecast:</h2>
 
             <div class="row d-flex">
-                <div id="forecast-container" class="container d-flex flex-row px-5 py-5 list-group"></div>
+                <div id="forecast-container" class="container d-flex flex-row px-2 list-group"></div>
             </div>
         </div>
       </main>

@@ -9,6 +9,7 @@ var todayHumidity = document.querySelector("#humidity");
 var todayWind = document.querySelector("#wind");
 var todayUV = document.querySelector("#uv");
 var uvColor = document.querySelector("#uv-color");
+
 var forecastContainer = document.querySelector("#forecast-container");
 
 var prevCities = [];
@@ -58,7 +59,7 @@ function renderWeather(lat, lon, city) {
 
                 // Clear the cards
                 $(forecastContainer).empty();
-                
+
                 // Creates new cards for the 5-day forecast
                 for (let i = 0; i < 5; i++) {
 
@@ -118,6 +119,9 @@ function getCoordinates(city) {
 
 // Color codes the UV
 function getUVI(num, element) {
+    element.style.borderRadius = "3px";
+    element.style.padding = "3px";
+    element.style.color = "white";
     if (num >= 0 && num < 3) {
         element.style.backgroundColor = "green";
     } else if (num >= 3 && num < 6) {
