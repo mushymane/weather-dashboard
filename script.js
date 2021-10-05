@@ -101,7 +101,7 @@ function renderWeather(lat, lon, city) {
 // Requests a response from Geocoding API to get coordinates. Latitude and longitude are needed to
 // receive a response from One Call API. Then renders the weather
 function getCoordinates(city) {
-    var apiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1" + "&appid=" + appid;
+    var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1" + "&appid=" + appid;
 
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
