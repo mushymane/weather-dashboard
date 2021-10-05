@@ -36,21 +36,24 @@ function renderWeather(lat, lon, city) {
             response.json().then(function (data) {
                 console.log("data starts here")
                 console.log(data);
+
                 var iconCode = data.current.weather[0].icon;
-                console.log(iconCode, typeof(iconCode))
                 var iconLink = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
                 var icon = document.createElement("img");
                 icon.setAttribute("src", iconLink);
-                // getIcon(data.current.weather[0].icon)
                 todayHeader.textContent = city + " (" + moment().format("dddd, MMMM Do YYYY") + ")";
                 todayHeader.append(icon)
+
                 todayTemp.textContent = "Temperature: " + data.current.temp + " °F";
                 todayHumidity.textContent = "Humidity: " + data.current.humidity;
                 todayWind.textContent = "Wind Speed: " + data.current.wind_speed + " MPH";
+
                 todayUV.textContent = "UV Index: ";
-                $("uv-color").text(data.current.uvi);
-                console.log(data.current.uvi, typeof(data.current.uvi))
-                getUVI(data.current.uvi);
+                var uvbg = document.createElement("span");
+                uvbg.textContent = data.current.uvi;
+                // console.log(data.current.uvi, typeof(data.current.uvi))
+                getUVI(data.current.uvi, uvbg);
+                todayUV.append(uvbg);
 
                 for (let i = 0; i < 5; i++) {
                     var card = document.createElement("div");
@@ -87,22 +90,18 @@ function getCoordinates(city) {
     });
 }
 
-function getUVI(num) {
+function getUVI(num, element) {
     if (num >= 0 && num < 3) {
-        uvColor.style.backgroundColor = "green";
+        element.style.backgroundColor = "green";
     } else if (num >= 3 && num < 6) {
-        uvColor.style.backgroundColor = "yellow";
+        element.style.backgroundColor = "yellow";
     } else if (num >= 6 && num < 8) {
-        uvColor.style.backgroundColor = "orange";
+        element.style.backgroundColor = "orange";
     } else if (num >= 8 && num < 11) {
-        uvColor.style.backgroundColor = "red";
+        element.style.backgroundColor = "red";
     } else {
-        uvColor.style.backgroundColor = "purple";
+        element.style.backgroundColor = "purple";
     }
-}
-
-function getIcon(iconCode) {
-    return "<img src='http://openweathermap.org/img/wn/" + iconCode + "@2x.png'>"
 }
 
 function renderPrevCities() {
