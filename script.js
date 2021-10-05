@@ -140,7 +140,7 @@ function renderPrevCities() {
     // Clear prevButtons element and update
     prevButtonsEl.innerHTML = "";
   
-    // Render a new button for each city
+    // Render a new button for each city - iterates in reverse
     for (var i = prevCities.length - 1; i >= 0; i--) {
       var city = prevCities[i];
   
