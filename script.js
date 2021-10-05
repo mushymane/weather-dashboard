@@ -184,7 +184,6 @@ cityForm.addEventListener("submit", function(event) {
 // Event listener for previous cities buttons - renders the weather
 prevButtonsEl.addEventListener("click", function(event) {
     var element = event.target;
-    console.log("I was clicked");
 
     if (element.matches("button") === true) {
         var city = element.textContent;
